@@ -1,5 +1,5 @@
 import { computed, onMounted, ref, watch } from 'vue';
-import type { UnwrapRef, Ref, ComputedRef } from 'vue';
+import type { UnwrapRef, Ref } from 'vue';
 import {
     add,
     addDays,
@@ -28,7 +28,6 @@ import type {
     MenuProps,
     VueEmit,
     WeekStartNum,
-    ITransition,
 } from '@/interfaces';
 import {
     dateToUtc,
@@ -48,7 +47,6 @@ export const useCalendar = (
     emit: VueEmit,
     updateFlow: () => void,
     calendarRefs: Ref<CalendarRef[]>,
-    transitions: ComputedRef<ITransition>,
 ) => {
     const today = ref<Date>(new Date());
     const hoveredDate = ref<Date | null>();
@@ -271,7 +269,9 @@ export const useCalendar = (
         if (modelValue.value) {
             if (isModelValueRange(modelValue.value)) {
                 if (modelValue.value.length === 2 && !props.multiDates) {
-                    assignMonthAndYear(modelValue.value[0]);
+                    if (!props.multiCalendars || !props.multiCalendarsSolo) {
+                        assignMonthAndYear(modelValue.value[0]);
+                    }
                     hours.value = [
                         getHours(modelValue.value[0]),
                         modelValue.value[1] ? getHours(modelValue.value[1]) : getHours(new Date()),
@@ -732,13 +732,6 @@ export const useCalendar = (
         }
     };
 
-    const handleScroll = (event: WheelEvent, instance: number): void => {
-        if (props.monthChangeOnScroll) {
-            autoChangeMonth(props.monthChangeOnScroll !== 'inverse' ? -event.deltaY : event.deltaY, instance);
-            triggerCalendarTransition();
-        }
-    };
-
     const handleArrow = (arrow: 'left' | 'right', instance: number, vertical = false): void => {
         if (props.monthChangeOnArrows && props.vertical === vertical) {
             handleSwipe(arrow, instance);
@@ -808,7 +801,6 @@ export const useCalendar = (
         isAutoRangeStart,
         clearHoverDate,
         rangeActiveStartEnd,
-        handleScroll,
         getMarker,
         handleArrow,
         handleSwipe,

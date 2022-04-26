@@ -83,7 +83,6 @@
                                 :year="year(instance)"
                                 @select-date="selectDate($event, !isFirstInstance(instance))"
                                 @set-hover-date="setHoverDate($event)"
-                                @handle-scroll="handleScroll($event, instance)"
                                 @handle-swipe="handleSwipe($event, instance)"
                                 @mount="childMount('calendar')"
                                 @reset-flow="resetFlow"
@@ -299,7 +298,6 @@
         clearHoverDate,
         rangeActiveStartEnd,
         monthYearSelect,
-        handleScroll,
         handleArrow,
         handleSwipe,
         getMarker,

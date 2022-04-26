@@ -7,7 +7,6 @@
                 :class="calendarWrapClass"
                 role="grid"
                 :aria-label="ariaLabels.calendarWrap"
-                @wheel.prevent="$emit('handleScroll', $event)"
             >
                 <div class="dp__calendar_header" role="row">
                     <div class="dp__calendar_header_item" role="gridcell" v-if="weekNumbers">{{ weekNumName }}</div>
@@ -105,7 +104,7 @@
     import { isDateAfter, isDateEqual, resetDateTime, setDateMonthOrYear } from '@/utils/date-utils';
     import { ariaLabelsKey, CalendarProps, MonthCalendarSharedProps, transitionsKey } from '@/utils/props';
 
-    const emit = defineEmits(['selectDate', 'setHoverDate', 'handleScroll', 'mount', 'handleSwipe']);
+    const emit = defineEmits(['selectDate', 'setHoverDate', 'mount', 'handleSwipe']);
 
     const props = defineProps({
         ...MonthCalendarSharedProps,
@@ -136,9 +135,13 @@
         emit('mount');
         if (!props.noSwipe) {
             if (calendarWrapRef.value) {
-                calendarWrapRef.value.addEventListener('touchstart', onTouchStart);
+                calendarWrapRef.value.addEventListener('touchstart', onTouchStart, {
+                    passive: true,
+                });
                 calendarWrapRef.value.addEventListener('touchend', onTouchEnd);
-                calendarWrapRef.value.addEventListener('touchmove', onTouchMove);
+                calendarWrapRef.value.addEventListener('touchmove', onTouchMove, {
+                    passive: true,
+                });
             }
         }
     });
