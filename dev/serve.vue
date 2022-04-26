@@ -19,6 +19,7 @@
             :keep-action-row="false"
             :hide-offset-dates="false"
             :prevent-min-max-navigation="false"
+            v-bind="{ minDate }"
         />
     </div>
 </template>
@@ -27,8 +28,9 @@
     import { ref, defineAsyncComponent, computed } from 'vue';
     import Datepicker from '../src/VueDatePicker/VueDatePicker.vue';
     const MonthYear = computed(() => defineAsyncComponent(() => import('./MonthYearCustom.vue')));
+    const minDate = ref(new Date());
 
-    const selectedDate = ref();
+    const selectedDate = ref([new Date('03-27-2022'), new Date('03-30-2022')]);
 </script>
 
 <style lang="scss">

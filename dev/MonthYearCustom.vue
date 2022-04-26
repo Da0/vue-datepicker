@@ -9,7 +9,6 @@
 
     export default defineComponent({
         name: 'MonthYearCustom',
-        emits: ['update:month', 'update:year'],
         // Available props
         props: {
             months: { type: Array, default: () => [] },
@@ -19,10 +18,10 @@
             customProps: { type: Object, default: null },
         },
 
-        data() {
-            return {
-                currentMonth: this.months[this.month]?.text,
-            };
+        computed: {
+            currentMonth() {
+                return this.months[this.month]?.text;
+            },
         },
     });
 </script>
